@@ -11,6 +11,7 @@
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 1;
@@ -24,6 +25,16 @@
   pointer-events: auto;
   filter: url(#grain);
   transform: rotate(-3deg);
+}
+
+.tagline {
+  font-family: 'Gaya', serif;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: #c8d400;
+  margin-top: 3rem;
+  text-align: center;
+  letter-spacing: 0.05em;
 }
 
 .instagram-link {

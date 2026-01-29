@@ -52,7 +52,8 @@ function App() {
         }}
       />
       <div className="logo-container">
-        <img src="/logo.svg" alt="Ywale" className="logo" />
+        <img src="/logo.svg" alt="Ywalé" className="logo" />
+        <p className="tagline">Handmade natural wine</p>
       </div>
       <a
         href="https://www.instagram.com/ywale.wine"
