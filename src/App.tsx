@@ -1,8 +1,22 @@
 import { GrainGradient } from "@paper-design/shaders-react";
 import { Instagram } from "lucide-react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
+  const [viewportHeight, setViewportHeight] = useState(window.outerHeight || window.innerHeight);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setViewportHeight(window.outerHeight || window.innerHeight);
+    };
+
+    window.addEventListener("resize", updateHeight);
+    updateHeight();
+
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
+
   return (
     <div className="app">
       {/* SVG filter for grain/noise effect */}
@@ -47,8 +61,8 @@ function App() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: "100%",
-          height: "100%",
+          width: "100vw",
+          height: viewportHeight,
         }}
       />
       <div className="logo-container">
