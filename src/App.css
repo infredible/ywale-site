@@ -46,9 +46,32 @@
   left: calc(24px + env(safe-area-inset-left));
   z-index: 2;
   color: #c8d400;
+  display: flex;
+  align-items: center;
+  height: 32px;
   transition: opacity 0.2s ease;
 }
 
 .instagram-link:hover {
+  opacity: 0.7;
+}
+
+.contact-link {
+  position: fixed;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  right: calc(24px + env(safe-area-inset-right));
+  z-index: 2;
+  color: #c8d400;
+  font-family: 'Gaya', serif;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  transition: opacity 0.2s ease;
+}
+
+.contact-link:hover {
   opacity: 0.7;
 }

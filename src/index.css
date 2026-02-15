@@ -1,8 +1,43 @@
 @font-face {
   font-family: 'Gaya';
+  src: url('/fonts/Gaya.otf') format('opentype');
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Gaya';
   src: url('/fonts/Gaya-Italic.otf') format('opentype');
   font-style: italic;
   font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Family';
+  src: url('/fonts/Family-Light.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Family';
+  src: url('/fonts/Family-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Family';
+  src: url('/fonts/Family-Medium.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Family';
+  src: url('/fonts/Family-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
 }
 
 * {

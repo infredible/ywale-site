@@ -77,6 +77,9 @@ function App() {
       >
         <Instagram size={32} />
       </a>
+      <a href="mailto:yo@ywale.wine" className="contact-link">
+        Contact
+      </a>
     </div>
   );
 }
