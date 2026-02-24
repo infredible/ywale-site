@@ -1,16 +1,57 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
+import { Decal } from "@react-three/drei";
 import * as THREE from "three";
+
+function createBottleProfile(radius: number): THREE.Vector2[] {
+  const r = radius;
+  const h = radius * 3.5;
+  const pts: THREE.Vector2[] = [];
+
+  // Bottom cap center
+  pts.push(new THREE.Vector2(0, 0));
+  // Base edge
+  pts.push(new THREE.Vector2(r, 0));
+  // Body cylinder
+  pts.push(new THREE.Vector2(r, h * 0.1));
+  pts.push(new THREE.Vector2(r, h * 0.2));
+  pts.push(new THREE.Vector2(r, h * 0.35));
+  pts.push(new THREE.Vector2(r, h * 0.45));
+  pts.push(new THREE.Vector2(r, h * 0.55));
+  // Shoulder curve (smooth transition inward)
+  pts.push(new THREE.Vector2(r * 0.92, h * 0.58));
+  pts.push(new THREE.Vector2(r * 0.8, h * 0.61));
+  pts.push(new THREE.Vector2(r * 0.65, h * 0.64));
+  pts.push(new THREE.Vector2(r * 0.5, h * 0.67));
+  pts.push(new THREE.Vector2(r * 0.38, h * 0.69));
+  pts.push(new THREE.Vector2(r * 0.3, h * 0.71));
+  // Neck
+  pts.push(new THREE.Vector2(r * 0.28, h * 0.75));
+  pts.push(new THREE.Vector2(r * 0.26, h * 0.8));
+  pts.push(new THREE.Vector2(r * 0.25, h * 0.85));
+  pts.push(new THREE.Vector2(r * 0.25, h * 0.9));
+  // Lip
+  pts.push(new THREE.Vector2(r * 0.28, h * 0.92));
+  pts.push(new THREE.Vector2(r * 0.3, h * 0.94));
+  pts.push(new THREE.Vector2(r * 0.3, h * 0.97));
+  pts.push(new THREE.Vector2(r * 0.28, h * 0.99));
+  // Top cap center
+  pts.push(new THREE.Vector2(0, h));
+
+  return pts;
+}
 
 interface LogoOrbitProps {
   orbitSpeed: number;
   directionChangeSpeed: number;
   tiltAngle: number;
   logoScale: number;
+  logoCount: number;
   sphereRadius: number;
   sphereColor: string;
   sphereOpacity: number;
   showWireframe: boolean;
+  meshShape: "sphere" | "bottle";
 }
 
 export function LogoOrbit({
@@ -18,60 +59,56 @@ export function LogoOrbit({
   directionChangeSpeed,
   tiltAngle,
   logoScale,
+  logoCount,
   sphereRadius,
   sphereColor,
   sphereOpacity,
   showWireframe,
+  meshShape,
 }: LogoOrbitProps) {
   const tiltRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
-  const logoMeshRef = useRef<THREE.Mesh>(null);
   const precessionAngle = useRef(0);
+  const angleRef = useRef(0);
+  const [angle, setAngle] = useState(0);
   const [logoTexture, setLogoTexture] = useState<THREE.CanvasTexture | null>(
     null
   );
 
+  const bottlePoints = useMemo(
+    () => createBottleProfile(sphereRadius),
+    [sphereRadius]
+  );
+
+  // Single-logo texture (white on transparent, matching logo aspect ratio)
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
+      const w = 1024;
+      const h = Math.round(w * (310 / 1219));
       const canvas = document.createElement("canvas");
-      canvas.width = 4096;
-      canvas.height = 2048;
+      canvas.width = w;
+      canvas.height = h;
       const ctx = canvas.getContext("2d")!;
 
-      // Draw logo white on transparent, centered on equirectangular canvas
-      // Logo aspect ratio: 1219:310
-      const logoW = canvas.width * logoScale * 0.1;
-      const logoH = logoW * (310 / 1219);
-      const x = (canvas.width - logoW) / 2;
-      const y = (canvas.height - logoH) / 2;
-
-      // Draw original SVG then composite to white
-      ctx.drawImage(img, x, y, logoW, logoH);
+      ctx.drawImage(img, 0, 0, w, h);
       ctx.globalCompositeOperation = "source-in";
       ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.globalCompositeOperation = "source-over";
+      ctx.fillRect(0, 0, w, h);
 
       const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
       texture.needsUpdate = true;
       setLogoTexture(texture);
     };
     img.src = "/logo.svg";
-  }, [logoScale]);
+  }, []);
 
   useFrame((_state, delta) => {
-    // Scroll both meshes along the tilted axis via local Y rotation
-    if (meshRef.current) {
-      meshRef.current.rotation.y += orbitSpeed * delta;
-    }
-    if (logoMeshRef.current) {
-      logoMeshRef.current.rotation.y += orbitSpeed * delta;
-    }
+    // Animate orbital angle — mesh stays static, only decal positions change
+    angleRef.current += orbitSpeed * delta;
+    setAngle(angleRef.current);
 
-    // Precession tilt
+    // Precession tilt on outer group
     precessionAngle.current += directionChangeSpeed * delta;
     if (tiltRef.current) {
       tiltRef.current.rotation.x =
@@ -81,27 +118,50 @@ export function LogoOrbit({
     }
   });
 
+  const r = sphereRadius;
+  // Bottle body extends from y=0 to y=h*0.55; midpoint at h*0.275
+  const bodyMidY = sphereRadius * 3.5 * 0.275;
+  const decalW = logoScale * 0.3;
+  const decalH = decalW * (310 / 1219);
+
   return (
     <group ref={tiltRef}>
       <mesh ref={meshRef}>
-        <sphereGeometry args={[sphereRadius, 64, 64]} />
+        {meshShape === "sphere" ? (
+          <sphereGeometry args={[sphereRadius, 64, 64]} />
+        ) : (
+          <latheGeometry args={[bottlePoints, 64]} />
+        )}
         <meshStandardMaterial
           color={sphereColor}
           transparent
           opacity={sphereOpacity}
           wireframe={showWireframe}
         />
+        {logoTexture &&
+          Array.from({ length: logoCount }, (_, i) => {
+            const theta = angle + (i * Math.PI * 2) / logoCount;
+            const pos: [number, number, number] =
+              meshShape === "sphere"
+                ? [r * Math.sin(theta), 0, r * Math.cos(theta)]
+                : [r * Math.sin(theta), bodyMidY, r * Math.cos(theta)];
+            return (
+              <Decal
+                key={i}
+                position={pos}
+                rotation={[0, theta, 0]}
+                scale={[decalW, decalH, 1]}
+              >
+                <meshBasicMaterial
+                  map={logoTexture}
+                  transparent
+                  polygonOffset
+                  polygonOffsetFactor={-1}
+                />
+              </Decal>
+            );
+          })}
       </mesh>
-      {logoTexture && (
-        <mesh ref={logoMeshRef}>
-          <sphereGeometry args={[sphereRadius * 1.001, 64, 64]} />
-          <meshStandardMaterial
-            map={logoTexture}
-            transparent
-            depthWrite={false}
-          />
-        </mesh>
-      )}
     </group>
   );
 }
