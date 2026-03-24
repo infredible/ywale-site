@@ -1,85 +1,74 @@
 import { GrainGradient } from "@paper-design/shaders-react";
 import { Instagram } from "lucide-react";
-import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [viewportHeight, setViewportHeight] = useState(window.outerHeight || window.innerHeight);
-
-  useEffect(() => {
-    const updateHeight = () => {
-      setViewportHeight(window.outerHeight || window.innerHeight);
-    };
-
-    window.addEventListener("resize", updateHeight);
-    updateHeight();
-
-    return () => window.removeEventListener("resize", updateHeight);
-  }, []);
-
   return (
     <div className="app">
-      {/* SVG filter for grain/noise effect */}
-      <svg style={{ position: "absolute", width: 0, height: 0 }}>
-        <defs>
-          <filter id="grain">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.8"
-              numOctaves="4"
-              stitchTiles="stitch"
-              result="noise"
-            />
-            <feColorMatrix
-              type="saturate"
-              values="0"
-              in="noise"
-              result="monoNoise"
-            />
-            <feBlend
-              in="SourceGraphic"
-              in2="monoNoise"
-              mode="multiply"
-              result="blended"
-            />
-            {/* Clip the result to only the visible parts of the original image */}
-            <feComposite in="blended" in2="SourceGraphic" operator="in" />
-          </filter>
-        </defs>
-      </svg>
-
-      <GrainGradient
-        colors={["#fbff00", "#b42e08", "#f29e5a", "#af3704"]}
-        colorBack="#3e413e"
-        softness={0.43}
-        intensity={0.67}
-        noise={0.25}
-        shape="blob"
-        speed={0.62}
-        scale={2.32}
+      {/* Layer 1: blurred video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
         style={{
           position: "fixed",
-          top: 0,
-          left: 0,
+          inset: 0,
           width: "100vw",
-          height: viewportHeight,
+          height: "100vh",
+          objectFit: "cover",
+          filter: "blur(8px)",
+          transform: "scale(1.05)",
+          zIndex: 0,
         }}
-      />
+      >
+        <source src="/videos/white-flower.mp4" type="video/mp4" />
+      </video>
+
+      {/* Layer 2: GrainGradient grain overlay.
+          White base + multiply blend: white is neutral in multiply so only
+          the dark noise patches show through as visible grain on the video. */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 1,
+          mixBlendMode: "multiply",
+        }}
+      >
+        <GrainGradient
+          colorBack="#ffffff"
+          colors={["#ffffff"]}
+          noise={0.6}
+          softness={1}
+          speed={0}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+
       <div className="logo-container">
         <img src="/logo.svg" alt="Ywalé" className="logo" />
-        <p className="tagline">Handmade natural wine</p>
       </div>
-      <a
-        href="https://www.instagram.com/ywale.wine"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="instagram-link"
-      >
-        <Instagram size={32} />
-      </a>
-      <a href="mailto:yo@ywale.wine" className="contact-link">
-        Contact
-      </a>
+
+      <div className="bottom-fade" />
+
+      <p className="tagline">(Ywa-lay) means little village in Burmese. We make wine in the spirit of that: simple, honest, and made for sharing with the people around you.</p>
+
+      <div className="bottom-right">
+        <div className="bottom-links">
+          <a href="mailto:yo@ywale.wine" className="contact-link">
+            Contact
+          </a>
+          <a
+            href="https://www.instagram.com/ywale.wine"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="instagram-link"
+          >
+            <Instagram size={24} />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
