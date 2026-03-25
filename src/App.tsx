@@ -143,7 +143,7 @@ function App() {
       </div>
 
       <p className={`tagline${isBottleActive ? " tagline--hidden" : ""}`}>
-        (Ywa-lay) means little village in Burmese. We make wine in the spirit of that: simple, honest, and made for sharing with the people around you.
+        Ywalé (ywa-lay) means "little village" in Burmese. We make natural wine in the spirit of that: simple, honest, and made for sharing with the people around you.
       </p>
 
       <div className={`side-nav${isBottleActive ? " side-nav--hidden" : ""}`}>
@@ -174,21 +174,27 @@ function App() {
         </div>
       )}
       <audio ref={audioRef} src="/sounds/Domenique Dumont - La Bataille de Neige.mp3" loop />
-      <button className={`player${playing ? " player--playing" : ""}`} onClick={togglePlay} aria-label={playing ? "Pause" : "Play"}>
-        <img src="/images/comme-ca.jpg" alt="" className="player__art" />
-        <div className="player__overlay">
-          {playing ? (
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <rect x="5" y="4" width="4" height="16" rx="1" />
-              <rect x="15" y="4" width="4" height="16" rx="1" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="6,3 20,12 6,21" />
-            </svg>
-          )}
+      <div className="player-wrap">
+        <div className="player__label">
+          <span className="player__track">La Bataille de Neige</span>
+          <span className="player__artist">Domenique Dumont</span>
         </div>
-      </button>
+        <button className={`player${playing ? " player--playing" : ""}`} onClick={togglePlay} aria-label={playing ? "Pause" : "Play"}>
+          <img src="/images/comme-ca.jpg" alt="" className="player__art" />
+          <div className="player__overlay">
+            {playing ? (
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <rect x="5" y="4" width="4" height="16" rx="1" />
+                <rect x="15" y="4" width="4" height="16" rx="1" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="6,3 20,12 6,21" />
+              </svg>
+            )}
+          </div>
+        </button>
+      </div>
       <StoryModal open={storyOpen} onClose={() => setStoryOpen(false)} />
     </div>
   );
