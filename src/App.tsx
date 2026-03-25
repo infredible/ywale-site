@@ -27,6 +27,7 @@ const bottles = [
     details: "Anderson Valley, California",
     type: "Pétillant naturel · Special edition",
     description: "A week on skins — this one has a little color, a little texture, and a lot of summer. Watermelon, cantaloupe, fine bubbles.",
+    badge: true,
   },
 ];
 
@@ -114,6 +115,16 @@ function App() {
               onClick={onClick}
             >
               <img src={bottle.src} alt={bottle.alt} />
+              {bottle.badge && (
+                <svg className="bottle-badge" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <polygon
+                    points="50,0 59.1,16.2 75,6.7 74.7,25.3 93.3,25 83.8,40.9 100,50 83.8,59.1 93.3,75 74.7,74.7 75,93.3 59.1,83.8 50,100 40.9,83.8 25,93.3 25.3,74.7 6.7,75 16.2,59.1 0,50 16.2,40.9 6.7,25 25.3,25.3 25,6.7 40.9,16.2"
+                    fill="#ff4d8e"
+                  />
+                  <text x="50" y="48" textAnchor="middle" fontFamily="Gaya, serif" fontStyle="italic" fontSize="14" fill="white">Special</text>
+                  <text x="50" y="64" textAnchor="middle" fontFamily="Gaya, serif" fontStyle="italic" fontSize="14" fill="white">edition</text>
+                </svg>
+              )}
             </div>
           );
         })}

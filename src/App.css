@@ -91,6 +91,16 @@
 .bottle--peek      { transform: translateY(-50%) translateX(calc(100vw - 50%)); cursor: pointer; }
 .bottle--right     { transform: translateY(-50%) translateX(calc(150vw - 50%)); }
 
+.bottle-badge {
+  position: absolute;
+  top: 26%;
+  left: 38%;
+  transform: translateX(-50%) rotate(-10deg);
+  width: 19vh;
+  height: 19vh;
+  pointer-events: none;
+}
+
 /* img handles hover scale independently — no interference with wrapper's slide transition */
 .bottle--left-peek:hover img,
 .bottle--peek:hover img { scale: 1.03; }
