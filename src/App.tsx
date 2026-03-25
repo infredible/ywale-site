@@ -1,5 +1,5 @@
 import { GrainGradient } from "@paper-design/shaders-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { StoryModal } from "./components/StoryModal";
 
@@ -44,6 +44,20 @@ function App() {
   const [storyOpen, setStoryOpen] = useState(false);
   const [playing, setPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.play().catch(() => {
+      const startOnInteraction = () => {
+        audio.play();
+        window.removeEventListener("click", startOnInteraction);
+        window.removeEventListener("touchstart", startOnInteraction);
+      };
+      window.addEventListener("click", startOnInteraction);
+      window.addEventListener("touchstart", startOnInteraction);
+    });
+  }, []);
 
   function togglePlay() {
     if (!audioRef.current) return;
