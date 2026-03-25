@@ -86,13 +86,13 @@ function App() {
             ? () => setActiveIndex((i) => i + 1)
             : undefined;
           return (
-            <img
+            <div
               key={bottle.src}
-              src={bottle.src}
-              alt={bottle.alt}
               className={getBottleClass(i, activeIndex)}
               onClick={onClick}
-            />
+            >
+              <img src={bottle.src} alt={bottle.alt} />
+            </div>
           );
         })}
       </div>
