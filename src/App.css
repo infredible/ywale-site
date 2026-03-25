@@ -445,4 +445,8 @@
   .bottle {
     height: 80vh;
   }
+
+  .player-wrap {
+    display: none;
+  }
 }
