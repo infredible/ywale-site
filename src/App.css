@@ -449,4 +449,22 @@
   .player-wrap {
     display: none;
   }
+
+  .side-nav {
+    gap: 20px;
+  }
+
+  .nav-icon-item {
+    gap: 12px;
+  }
+
+  .nav-icon-img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nav-icon-label {
+    opacity: 1;
+    font-size: 1.2rem;
+  }
 }
