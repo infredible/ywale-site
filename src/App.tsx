@@ -42,12 +42,16 @@ function getBottleClass(i: number, activeIndex: number): string {
 function App() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [storyOpen, setStoryOpen] = useState(false);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
     audio.play().catch(() => {
       const startOnInteraction = () => {
         audio.play();
@@ -57,6 +61,10 @@ function App() {
       window.addEventListener("click", startOnInteraction);
       window.addEventListener("touchstart", startOnInteraction);
     });
+    return () => {
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+    };
   }, []);
 
   function togglePlay() {
@@ -66,7 +74,6 @@ function App() {
     } else {
       audioRef.current.play();
     }
-    setPlaying(!playing);
   }
   const isBottleActive = activeIndex >= 0;
 
