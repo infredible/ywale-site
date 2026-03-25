@@ -1,4 +1,3 @@
-import { GrainGradient } from "@paper-design/shaders-react";
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { StoryModal } from "./components/StoryModal";
@@ -45,6 +44,19 @@ function App() {
   const [isMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches);
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const grainRef = useRef<SVGFETurbulenceElement>(null);
+
+  useEffect(() => {
+    let frame: number;
+    let seed = 0;
+    const tick = () => {
+      seed = (seed + 1) % 1000;
+      grainRef.current?.setAttribute("seed", String(seed));
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     if (isMobile) return;
@@ -101,46 +113,29 @@ function App() {
         <source src="/videos/white-flower.mp4" type="video/mp4" />
       </video>
 
-      {/* Layer 2: GrainGradient — video grain (multiply, below UI) */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 1,
-          mixBlendMode: "multiply",
-          pointerEvents: "none",
-        }}
-      >
-        <GrainGradient
-          colorBack="#ffffff"
-          colors={["#ffffff"]}
-          noise={0.6}
-          softness={1}
-          speed={0}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
+      {/* SVG filter definition */}
+      <svg style={{ position: "absolute", width: 0, height: 0 }}>
+        <defs>
+          <filter id="grain-filter" x="0%" y="0%" width="100%" height="100%" colorInterpolationFilters="sRGB">
+            <feTurbulence ref={grainRef} type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" result="noise" />
+            <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
+            <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" />
+          </filter>
+        </defs>
+      </svg>
 
-      {/* Top grain — animated cinematic grain over the full UI stack */}
+      {/* Grain overlay */}
       <div
         style={{
           position: "fixed",
           inset: 0,
           zIndex: 30,
-          mixBlendMode: "overlay",
           pointerEvents: "none",
-          opacity: 0.85,
+          opacity: 0.35,
+          filter: "url(#grain-filter)",
+          background: "white",
         }}
-      >
-        <GrainGradient
-          colorBack="#808080"
-          colors={["#808080"]}
-          noise={0.5}
-          softness={0}
-          speed={0.8}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
+      />
 
       <div className="logo-container">
         <img
