@@ -19,6 +19,11 @@
   cursor: pointer;
   filter: url(#grain);
   transform: rotate(-3deg);
+  transition: transform 0.2s ease;
+}
+
+.logo:hover {
+  transform: rotate(-6deg) scale(1.04);
 }
 
 .bottom-fade {
@@ -163,10 +168,23 @@
   object-fit: contain;
   transition: transform 0.2s ease;
   flex-shrink: 0;
+  animation: navJiggle 2.5s ease-in-out infinite;
 }
 
+.side-nav > *:nth-child(2) .nav-icon-img { animation-delay: -0.9s; }
+.side-nav > *:nth-child(3) .nav-icon-img { animation-delay: -1.7s; }
+
 .nav-icon-item:hover .nav-icon-img {
+  animation: none;
   transform: scale(1.15) rotate(12deg);
+}
+
+@keyframes navJiggle {
+  0%, 55%, 100% { transform: rotate(0deg); }
+  10%  { transform: rotate(-10deg); }
+  22%  { transform: rotate(10deg); }
+  33%  { transform: rotate(-6deg); }
+  44%  { transform: rotate(4deg); }
 }
 
 .nav-icon-label {
