@@ -78,13 +78,14 @@ function App() {
         <source src="/videos/white-flower.mp4" type="video/mp4" />
       </video>
 
-      {/* Layer 2: GrainGradient grain overlay */}
+      {/* Layer 2: GrainGradient — video grain (multiply, below UI) */}
       <div
         style={{
           position: "fixed",
           inset: 0,
           zIndex: 1,
           mixBlendMode: "multiply",
+          pointerEvents: "none",
         }}
       >
         <GrainGradient
@@ -93,6 +94,27 @@ function App() {
           noise={0.6}
           softness={1}
           speed={0}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+
+      {/* Top grain — animated cinematic grain over the full UI stack */}
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 30,
+          mixBlendMode: "overlay",
+          pointerEvents: "none",
+          opacity: 0.85,
+        }}
+      >
+        <GrainGradient
+          colorBack="#808080"
+          colors={["#808080"]}
+          noise={0.5}
+          softness={0}
+          speed={0.8}
           style={{ width: "100%", height: "100%" }}
         />
       </div>
