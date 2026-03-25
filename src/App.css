@@ -308,7 +308,7 @@
   font-size: 0.85rem;
   color: #f8f4e8;
   opacity: 0.6;
-  margin: 0 0 0.8em;
+  margin: 0 0 0.2em;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -316,9 +316,9 @@
 .wine-info__description {
   font-family: 'Family', sans-serif;
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: 1.5;
   color: #f8f4e8;
-  margin: 0;
+  margin: 0.6em 0 0;
   text-wrap: pretty;
 }
 
