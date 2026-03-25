@@ -117,7 +117,7 @@ function App() {
       <svg style={{ position: "absolute", width: 0, height: 0 }}>
         <defs>
           <filter id="grain-filter" x="0%" y="0%" width="100%" height="100%" colorInterpolationFilters="sRGB">
-            <feTurbulence ref={grainRef} type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" result="noise" />
+            <feTurbulence ref={grainRef} type="fractalNoise" baseFrequency="0.2" numOctaves="3" stitchTiles="stitch" result="noise" />
             <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
             <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" />
           </filter>
@@ -131,7 +131,7 @@ function App() {
           inset: 0,
           zIndex: 30,
           pointerEvents: "none",
-          opacity: 0.35,
+          opacity: 0.12,
           filter: "url(#grain-filter)",
           background: "white",
         }}
