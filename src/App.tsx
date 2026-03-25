@@ -4,8 +4,30 @@ import "./App.css";
 import { StoryModal } from "./components/StoryModal";
 
 const bottles = [
-  { src: "/images/malvasia-25-cutout.png", alt: "Malvasia '25" },
-  { src: "/images/carignan-25-cutout.png", alt: "Carignan '25" },
+  {
+    src: "/images/carignan-25-cutout.png",
+    alt: "Carignan '25",
+    name: "Carignan '25",
+    details: "Santa Clara County, California",
+    type: "Red wine",
+    description: "Nice out of the fridge. Light-bodied old vine Carignan with some grip and brambly fruit. Blackberry, cracked pepper, a wisp of smoke.",
+  },
+  {
+    src: "/images/malvasia-25-cutout.png",
+    alt: "Malvasia '25",
+    name: "Malvasia '25",
+    details: "Suisun Valley, California",
+    type: "Orange wine",
+    description: "Two days on skins. Dried apricot, lemon peel, ripe pineapple, and hints of white flower. Unfiltered.",
+  },
+  {
+    src: "/images/malvasia-petnat-25-cutout.png",
+    alt: "Malvasia Pét-nat '25",
+    name: "Malvasia Pét-nat '25",
+    details: "Anderson Valley, California",
+    type: "Pétillant naturel · Special edition",
+    description: "A week on skins — this one has a little color, a little texture, and a lot of summer. Watermelon, cantaloupe, fine bubbles.",
+  },
 ];
 
 function getBottleClass(i: number, activeIndex: number): string {
@@ -75,7 +97,7 @@ function App() {
       <div className={`vignette${isBottleActive ? " vignette--active" : ""}`} />
 
       {/* Bottle carousel */}
-      <div className="carousel">
+      <div className={`carousel${isBottleActive ? " carousel--active" : ""}`}>
         {bottles.map((bottle, i) => {
           const isCenter = i === activeIndex;
           const isPeek = i === activeIndex + 1;
@@ -101,7 +123,7 @@ function App() {
         (Ywa-lay) means little village in Burmese. We make wine in the spirit of that: simple, honest, and made for sharing with the people around you.
       </p>
 
-      <div className="side-nav">
+      <div className={`side-nav${isBottleActive ? " side-nav--hidden" : ""}`}>
         <button className="nav-icon-item" onClick={() => setStoryOpen(true)}>
           <img src="/icons/flower.svg" alt="Our story" className="nav-icon-img" />
           <span className="nav-icon-label">Our story</span>
@@ -120,6 +142,14 @@ function App() {
           <span className="nav-icon-label">Contact</span>
         </a>
       </div>
+      {isBottleActive && (
+        <div className="wine-info" key={activeIndex}>
+          <p className="wine-info__name">{bottles[activeIndex].name}</p>
+          <p className="wine-info__details">{bottles[activeIndex].details}</p>
+          <p className="wine-info__details">{bottles[activeIndex].type}</p>
+          <p className="wine-info__description">{bottles[activeIndex].description}</p>
+        </div>
+      )}
       <StoryModal open={storyOpen} onClose={() => setStoryOpen(false)} />
     </div>
   );

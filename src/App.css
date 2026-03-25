@@ -71,8 +71,11 @@
   height: 95vh;
   width: fit-content;
   pointer-events: auto;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
 }
+
+.carousel--active .bottle--left-peek,
+.carousel--active .bottle--peek { opacity: 0.35; }
 
 .bottle img {
   height: 100%;
@@ -124,6 +127,12 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 28px;
+  transition: opacity 0.4s ease;
+}
+
+.side-nav--hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .nav-icon-item {
@@ -163,6 +172,44 @@
 
 .nav-icon-item:hover .nav-icon-label {
   opacity: 1;
+}
+
+/* Wine info panel */
+.wine-info {
+  position: fixed;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  left: calc(24px + env(safe-area-inset-left));
+  z-index: 4;
+  max-width: min(38ch, calc(100vw - 48px));
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.wine-info__name {
+  font-family: 'Gaya', serif;
+  font-style: italic;
+  font-size: 2.2rem;
+  color: #c8d400;
+  margin: 0 0 0.2em;
+  letter-spacing: 0.05em;
+}
+
+.wine-info__details {
+  font-family: 'Family', sans-serif;
+  font-size: 0.85rem;
+  color: #f8f4e8;
+  opacity: 0.6;
+  margin: 0 0 0.8em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.wine-info__description {
+  font-family: 'Family', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #f8f4e8;
+  margin: 0;
+  text-wrap: pretty;
 }
 
 /* Story modal */
