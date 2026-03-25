@@ -184,6 +184,70 @@
   opacity: 1;
 }
 
+/* Music player */
+.player {
+  position: fixed;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  right: calc(24px + env(safe-area-inset-right));
+  z-index: 4;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5), 0 0 0 5px #111, 0 0 0 8px #2a2a2a;
+}
+
+.player__art {
+  animation: recordSpin 8s linear infinite;
+  animation-play-state: paused;
+}
+
+.player--playing .player__art {
+  animation-play-state: running;
+}
+
+.player:hover .player__art {
+  animation-play-state: paused;
+}
+
+.player__art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+}
+
+.player__overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.player:hover .player__overlay {
+  opacity: 1;
+}
+
+.player__overlay svg {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes recordSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 /* Wine info panel */
 .wine-info {
   position: fixed;

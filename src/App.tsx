@@ -1,5 +1,5 @@
 import { GrainGradient } from "@paper-design/shaders-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./App.css";
 import { StoryModal } from "./components/StoryModal";
 
@@ -42,6 +42,18 @@ function getBottleClass(i: number, activeIndex: number): string {
 function App() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [storyOpen, setStoryOpen] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  function togglePlay() {
+    if (!audioRef.current) return;
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setPlaying(!playing);
+  }
   const isBottleActive = activeIndex >= 0;
 
   return (
@@ -161,6 +173,22 @@ function App() {
           <p className="wine-info__description">{bottles[activeIndex].description}</p>
         </div>
       )}
+      <audio ref={audioRef} src="/sounds/Domenique Dumont - La Bataille de Neige.mp3" loop />
+      <button className={`player${playing ? " player--playing" : ""}`} onClick={togglePlay} aria-label={playing ? "Pause" : "Play"}>
+        <img src="/images/comme-ca.jpg" alt="" className="player__art" />
+        <div className="player__overlay">
+          {playing ? (
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <rect x="5" y="4" width="4" height="16" rx="1" />
+              <rect x="15" y="4" width="4" height="16" rx="1" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6,3 20,12 6,21" />
+            </svg>
+          )}
+        </div>
+      </button>
       <StoryModal open={storyOpen} onClose={() => setStoryOpen(false)} />
     </div>
   );
