@@ -42,7 +42,7 @@ function getBottleClass(i: number, activeIndex: number): string {
 function App() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [storyOpen, setStoryOpen] = useState(false);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   function togglePlay() {
@@ -195,7 +195,7 @@ function App() {
           <p className="wine-info__description">{bottles[activeIndex].description}</p>
         </div>
       )}
-      <audio ref={audioRef} src="/sounds/Domenique Dumont - La Bataille de Neige.mp3" loop />
+      <audio ref={audioRef} src="/sounds/Domenique Dumont - La Bataille de Neige.mp3" loop autoPlay />
       <div className="player-wrap">
         <div className="player__label">
           <span className="player__track">La Bataille de Neige</span>
